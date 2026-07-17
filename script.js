@@ -143,7 +143,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     submitBtn.textContent = 'Mengirim...';
 
     // URL sudah diubah akhirannya menjadi /exec
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRvUB1sHwiBj8SJ1qxmlAk6EWdJGr3EnpYP7zVYN8/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDW3F_1JgAvZdkDK7IZjfwD6fszZOTqB9si44tDKjKcXQMxalGID4vnrlycA3LLTr3/exec';
 
     // Membungkus data menjadi format standar formulir agar tidak diblokir browser
     const formData = new URLSearchParams();
