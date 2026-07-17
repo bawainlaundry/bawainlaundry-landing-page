@@ -1169,7 +1169,23 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   }
   .footer-copyright { margin-top: 0; }
 }
-
+/* ---- PERBAIKAN TUMPANG TINDIH FOOTER MOBILE ---- */
+@media (max-width: 767px) {
+  .footer-hero {
+    /* Menambah bantalan/ruang kosong di bawah agar deretan tombol terdorong ke atas */
+    padding-bottom: 11rem; 
+  }
+  
+  .footer-mascot-wrap {
+    /* Menggeser maskot mentok ke ujung kanan agar tidak menghalangi area tengah */
+    right: 0; 
+  }
+  
+  .footer-mascot {
+    /* Sedikit memperkecil ukuran maskot di layar HP */
+    width: 125px; 
+  }
+}
 /* ============================================================
    UTILITY — scroll offset for anchors (sticky header)
    ============================================================ */
