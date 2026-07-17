@@ -1178,7 +1178,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   
   .footer-mascot-wrap {
     /* Menggeser maskot mentok ke ujung kanan agar tidak menghalangi area tengah */
-    right: 0; 
+    right: 1; 
   }
   
   .footer-mascot {
