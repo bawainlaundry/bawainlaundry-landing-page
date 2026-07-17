@@ -104,10 +104,12 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 /* ============================================================
    4. WAITLIST FORM — validation + mock submission
    ============================================================ */
+/* ============================================================
+   4. WAITLIST FORM — validation + submission
+   ============================================================ */
 (function initWaitlistForm() {
   const form        = document.getElementById('waitlistForm');
   const submitBtn   = document.getElementById('submitBtn');
-  const successMsg  = document.getElementById('formSuccess');
   const namaInput   = document.getElementById('namaLengkap');
   const igInput     = document.getElementById('usernameIG');
   const checkbox    = document.getElementById('privacyConsent');
@@ -138,63 +140,43 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Mendaftar...';
+    submitBtn.textContent = 'Mengirim...';
 
-    // ─────────────────────────────────────────────────────────
-    // TODO: Ganti APPS_SCRIPT_URL dengan URL deployment Apps Script kamu.
-    //
-    // Langkah integrasi Google Sheets:
-    // 1. Buka Google Sheets baru → Extensions → Apps Script
-    // 2. Paste kode berikut:
-    //
-    //    function doPost(e) {
-    //      var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    //      var data  = JSON.parse(e.postData.contents);
-    //      sheet.appendRow([new Date(), data.nama, data.instagram]);
-    //      return ContentService
-    //        .createTextOutput(JSON.stringify({ result: 'success' }))
-    //        .setMimeType(ContentService.MimeType.JSON);
-    //    }
-    //
-    // 3. Deploy → New deployment → Web App
-    //    - Execute as: Me
-    //    - Who has access: Anyone
-    // 4. Copy URL deployment, ganti nilai APPS_SCRIPT_URL di bawah.
-    // ─────────────────────────────────────────────────────────
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDW3F_1JgAvZdkDK7IZjfwD6fszZOTqB9si44tDKjKcXQMxalGID4vnrlycA3LLTr3/exec';
+    // URL sudah diubah akhirannya menjadi /exec
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRvUB1sHwiBj8SJ1qxmlAk6EWdJGr3EnpYP7zVYN8/exec';
 
-    const submitToSheets = (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbwDW3F_1JgAvZdkDK7IZjfwD6fszZOTqB9si44tDKjKcXQMxalGID4vnrlycA3LLTr3/exec')
-      ? fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nama, instagram: ig })
-        })
-      : Promise.resolve(); // fallback: skip jika URL belum diset
+    // Membungkus data menjadi format standar formulir agar tidak diblokir browser
+    const formData = new URLSearchParams();
+    formData.append('nama', nama);
+    formData.append('instagram', ig);
 
-    submitToSheets
-      .then(() => {
-        // Show thank-you modal
-        const modal = document.getElementById('thankyouModal');
-        if (modal) {
-          modal.hidden = false;
-          document.getElementById('modalCloseBtn').focus();
-        }
-        form.reset();
-        submitBtn.textContent = 'Klaim Sekarang';
-        updateSubmitState();
-      })
-      .catch(() => {
-        // Even on network error, show modal (data may still have been recorded via no-cors)
-        const modal = document.getElementById('thankyouModal');
-        if (modal) {
-          modal.hidden = false;
-          document.getElementById('modalCloseBtn').focus();
-        }
-        form.reset();
-        submitBtn.textContent = 'Klaim Sekarang';
-        updateSubmitState();
-      });
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    })
+    .then(() => {
+      // Munculkan pop-up / modal Terima Kasih
+      const modal = document.getElementById('thankyouModal');
+      if (modal) {
+        modal.hidden = false;
+        document.getElementById('modalCloseBtn').focus();
+      }
+      form.reset();
+      submitBtn.textContent = 'Klaim Sekarang';
+      updateSubmitState();
+    })
+    .catch(() => {
+      // Walau error di browser karena no-cors, data biasanya tetap terkirim
+      const modal = document.getElementById('thankyouModal');
+      if (modal) {
+        modal.hidden = false;
+        document.getElementById('modalCloseBtn').focus();
+      }
+      form.reset();
+      submitBtn.textContent = 'Klaim Sekarang';
+      updateSubmitState();
+    });
   });
 })();
 
