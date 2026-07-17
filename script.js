@@ -289,3 +289,51 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     if (e.key === 'Escape' && !modal.hidden) closePrivacyModal();
   });
 })();
+
+/* ============================================================
+   8. APPSCRIP GOOGLE SHEET
+   ============================================================ */
+// Ganti URL di bawah ini dengan Web App URL yang Anda dapatkan dari Apps Script
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwDW3F_1JgAvZdkDK7IZjfwD6fszZOTqB9si44tDKjKcXQMxalGID4vnrlycA3LLTr3/exec'; 
+
+const form = document.getElementById('waitlistForm');
+const submitBtn = document.getElementById('submitBtn');
+const formSuccess = document.getElementById('formSuccess');
+
+// Aktifkan tombol submit jika checkbox disetujui (sesuai struktur form Anda)
+const privacyConsent = document.getElementById('privacyConsent');
+if(privacyConsent && submitBtn) {
+  privacyConsent.addEventListener('change', function() {
+    submitBtn.disabled = !this.checked;
+  });
+}
+
+// Menangani pengiriman form
+form.addEventListener('submit', e => {
+  e.preventDefault(); // Mencegah reload halaman
+  
+  // Ubah teks tombol saat loading
+  const originalBtnText = submitBtn.innerText;
+  submitBtn.innerText = "Mengirim...";
+  submitBtn.disabled = true;
+
+  // Mengirim data form ke Google Apps Script
+  fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+    .then(response => {
+      // Tampilkan pesan sukses
+      formSuccess.hidden = false;
+      
+      // Reset form
+      form.reset();
+      
+      // Kembalikan status tombol
+      submitBtn.innerText = originalBtnText;
+      submitBtn.disabled = true; // Biarkan disabled sampai checkbox di-klik lagi
+    })
+    .catch(error => {
+      console.error('Error!', error.message);
+      alert('Terjadi kesalahan saat mengirim data. Silakan coba lagi.');
+      submitBtn.innerText = originalBtnText;
+      submitBtn.disabled = false;
+    });
+});
