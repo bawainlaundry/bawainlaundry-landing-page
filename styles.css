@@ -404,7 +404,13 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   .sparkle-9  { top: 38%; left: 58%; font-size: 1.0rem; }
   .sparkle-10 { top: 62%; left: 36%; font-size: 1.3rem; }
 }
-
+/* ---- PERBAIKAN POSISI HERO CARD MOBILE ---- */
+@media (max-width: 767px) {
+  .hero-content {
+    align-items: flex-start; /* Mengubah posisi dari tengah menjadi merapat ke atas */
+    padding-top: 1.5rem;     /* Mengurangi jarak aman dari navbar (sebelumnya 3.5rem) */
+  }
+}
 /* ============================================================
    SECTION 3: VALUE PROPOSITION + WAITLIST
    ============================================================ */
